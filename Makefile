@@ -26,6 +26,13 @@ compile: generate
 run: compile
 	java -cp $(CLASS_DIR):$(ANTLR_JAR) Main
 
+tree: compile
+	echo '1 + 2 * 3' | java -cp "$(CLASS_DIR):$(ANTLR_JAR)" \
+		org.antlr.v4.gui.TestRig \
+		generated.Calc1.Calc1 \
+		root \
+		-gui
+
 clean:
 	rm -rf $(OUTPUT_DIR) $(CLASS_DIR)
 
