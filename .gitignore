@@ -1,4 +1,5 @@
 src/main/java/generated/
 bin/
 target/
+libs/
 *.class
