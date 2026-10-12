@@ -29,6 +29,7 @@ target/
 .springBeans
 .sts4-cache
 bin
+libs
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
