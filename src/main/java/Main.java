@@ -68,45 +68,72 @@
 // }
 
 //字符串匹配
-import generated.Calc1.*;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.Vocabulary;
-import org.antlr.v4.runtime.tree.ParseTree;
-import java.util.List;
+// import generated.Calc1.*;
+// import org.antlr.v4.runtime.CharStream;
+// import org.antlr.v4.runtime.CharStreams;
+// import org.antlr.v4.runtime.CommonTokenStream;
+// import org.antlr.v4.runtime.Token;
+// import org.antlr.v4.runtime.Vocabulary;
+// import org.antlr.v4.runtime.tree.ParseTree;
+// import java.util.List;
+
+
+// public class Main {
+//     public static void main(String[] args) throws Exception{
+//         // 从字符串获取字符流。若要从文件读取，可使用 CharStreams.fromFileName("文件路径")
+//         CharStream charStream = CharStreams.fromFileName("testcases/test1.calc");
+//         Calc1Lexer lexer = new Calc1Lexer(charStream);
+
+//         // 基于词法分析器实例，创建 Token 流
+//         CommonTokenStream tokens = new CommonTokenStream(lexer);
+
+//         // 调用 fill() 方法，让词法分析器开始工作，填充 Token 流
+//         tokens.fill();
+//         Vocabulary vocabulary = lexer.getVocabulary();
+
+//         Calc1Parser parser = new Calc1Parser(tokens);
+
+//         // 开始语法分析，调用起始规则 expr
+//         ParseTree tree = parser.root();
+
+//         System.out.println("Parse Tree: " + tree.toStringTree(parser)); // 打印语法分析树
+
+//         // 打印 Token 流信息
+//         for (Token token : tokens.getTokens()) {
+//             System.out.printf("Line:%d:%d TokenType: %s, Text: %s, Index: %d%n",
+//             token.getLine(),
+//             token.getCharPositionInLine(),
+//             vocabulary.getSymbolicName(token.getType()),
+//             token.getText(),
+//             token.getTokenIndex()
+//             );
+//         }
+//     }
+// }
+
+
+//lab5
+import generated.Calc1.Calc1Lexer;
+import generated.Calc1.Calc1Parser;
+import org.antlr.v4.runtime.*;
 
 
 public class Main {
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) {
         // 从字符串获取字符流。若要从文件读取，可使用 CharStreams.fromFileName("文件路径")
-        CharStream charStream = CharStreams.fromFileName("testcases/test1.calc");
-        Calc1Lexer lexer = new Calc1Lexer(charStream);
-
-        // 基于词法分析器实例，创建 Token 流
+        // 把要解析的字符串喂给 ANTLR
+        CharStream input = CharStreams.fromString("2 + 3 * (5 - 4) / 2\n 3-4/2\n20 /4 -3\n((1+2)*3-5)/2 ");
+        // 词法分析器
+        Calc1Lexer lexer = new Calc1Lexer(input);
+        // Token 流
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-        // 调用 fill() 方法，让词法分析器开始工作，填充 Token 流
-        tokens.fill();
-        Vocabulary vocabulary = lexer.getVocabulary();
-
+        // 语法分析器
         Calc1Parser parser = new Calc1Parser(tokens);
-
-        // 开始语法分析，调用起始规则 expr
-        ParseTree tree = parser.root();
-
-        System.out.println("Parse Tree: " + tree.toStringTree(parser)); // 打印语法分析树
-
-        // 打印 Token 流信息
-        for (Token token : tokens.getTokens()) {
-            System.out.printf("Line:%d:%d TokenType: %s, Text: %s, Index: %d%n",
-            token.getLine(),
-            token.getCharPositionInLine(),
-            vocabulary.getSymbolicName(token.getType()),
-            token.getText(),
-            token.getTokenIndex()
-            );
+        // 定义Visitor根节点 root context
+        Calc1Parser.RootContext context = parser.root();
+        CalcLab5Visitor visitor = new CalcLab5Visitor();
+        for (Calc1Parser.ExprContext expr : context.expr()) {
+            System.out.printf("%s = %s\n", expr.getText(), visitor.visit(expr));
         }
     }
 }

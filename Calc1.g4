@@ -1,27 +1,19 @@
 grammar Calc1;
+root: expr * EOF;
+expr    :
+          LPAREN expr RPAREN     # aren
+       |  expr (MUL | DIV) expr  # mulDiv
+       |  expr (ADD | SUB) expr  # addSub
+       |  factor                 # goFactor
+       ;
 
-root	: expr EOF ;
+factor  : INT;
 
-expr  	: expr PLUS expr
-	 	| expr DIV expr
-	 	| expr PLUS expr
-	 	| expr MINUS expr
-		| expr MUL expr
-		| LPAREN expr RPAREN
-	 	| factor
-        ;
-
-factor  : INT
-        | ID
-        ;
-
-LPAREN : '(' ;
-RPAREN : ')' ;
-
-INT : [0-9]+ ;
-PLUS: '+';
-MINUS: '-';
-MUL: '*';
-DIV: '/';
-ID : [a-zA-Z]+ ;
+INT : '0' | [1-9][0-9]*;
+ADD : '+' ;
+SUB : '-' ;
+MUL : '*';
+DIV : '/';
+LPAREN: '(';
+RPAREN: ')';
 WS  : [ \t\r\n]+ -> skip ;
