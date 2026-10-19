@@ -96,7 +96,9 @@ functionDef
  * generic recovery strategy alone.  Extend this rule according to the spec.
  */
 parameterList
-    : parameter (COMMA parameter)*
+    : parameter (COMMA parameter 
+    | {reportMissing(SplcLexer.COMMA, currentLine());} parameter
+    )*
     ;
 
 parameter
@@ -149,6 +151,30 @@ expressionStatement
  */
 expression
     : Number
+    |Identifier
+    |LPAREN expression RPAREN
+
+    |Identifier LPAREN argumentList? RPAREN
+    |expression LBRACK expression RBRACK
+    |expression DOT Identifier
+    |<assoc=right>expression POW expression
+    |PLUS expression
+    |MINUS expression
+    |NOT expression
+    |expression STAR expression
+    |expression DIV expression
+    |expression MOD expression
+    |expression PLUS expression
+    |expression MINUS expression
+    |expression LT expression
+    |expression LE expression
+    |expression GT expression
+    |expression GE expression
+    |expression EQ expression
+    |expression NEQ expression
+    |expression AND expression
+    |expression OR expression
+    |<assoc=right>expression ASSIGN expression
     ;
 
 argumentList
