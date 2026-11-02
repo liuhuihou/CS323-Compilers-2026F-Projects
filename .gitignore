@@ -1,1 +1,4 @@
 libs
+bin
+target
+.vscode/
